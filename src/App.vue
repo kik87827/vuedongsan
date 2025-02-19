@@ -1,4 +1,7 @@
 <template>
+  <div class="menu">
+    <a v-for="(item, index) in menus" :key="item">{{ item }}</a>
+  </div>
   <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
 
   <div v-for="(item, index) in products" :key="item.title">
@@ -9,6 +12,15 @@
 <style scope>
 body {
   text-align: center;
+}
+.menu {
+  background: darkslateblue;
+  padding: 15px;
+  border-radius: 5px;
+}
+.menu a {
+  color: white;
+  padding: 10px;
 }
 </style>
 
@@ -25,6 +37,7 @@ export default {
         { title: "천호동원룸", price: "가격은아무거나" },
         { title: "마포구원룸", price: "가격은아무거나" },
       ],
+      menus: ["Home", "Products", "About"],
     };
   },
   components: {},
