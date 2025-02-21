@@ -18,6 +18,7 @@ export default {
     roomData: Array,
     modalIndex: Number,
   },
+  emits: ["modalClose"],
   methods: {
     emitModal() {
       this.$emit("modalClose", false);

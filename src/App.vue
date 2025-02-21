@@ -19,13 +19,21 @@
   <DiscountBanner />
   <!-- <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" /> -->
 
-  <div v-for="(item, index) in roomData" :key="item.title" class="room-list">
-    <img :src="item.image" class="room-img" alt="" />
+  <div class="room-list">
+    <ProductItem
+      v-for="(item, index) in roomData"
+      :key="item.id"
+      :roomData="item"
+      :countItem="count[index]"
+      @sendCountUp="countUp(index)"
+      @sendModalOpen="modalOpen($event)"
+    />
+    <!-- <img :src="item.image" class="room-img" alt="" />
     <h4 @click="modalOpen(index)">{{ item.title }}</h4>
     <p>{{ item.price }} 원</p>
     <div>
       <button @click="countUp(index)">허위매물신고</button> <span>신고수 : {{ count[index] }}</span>
-    </div>
+    </div> -->
   </div>
 </template>
 <style scope>
@@ -68,6 +76,9 @@ body {
   padding: 20px;
   text-align: center;
 }
+.white-bg .room-img {
+  margin-top: 0;
+}
 
 .discount {
   background: #eee;
@@ -82,6 +93,7 @@ body {
 import roomData from "./assets/data";
 import DiscountBanner from "./components/DiscountBanner.vue";
 import Modal from "./components/Modal.vue";
+import ProductItem from "./components/ProductItem.vue";
 
 export default {
   name: "App",
@@ -104,15 +116,16 @@ export default {
   },
   components: {
     DiscountBanner,
+    ProductItem,
     Modal,
   },
   methods: {
     countUp(index) {
       this.count[index] += 1;
     },
-    modalOpen(index) {
+    modalOpen(num) {
       this.modalToggle = true;
-      this.modalIndex = index;
+      this.modalIndex = num;
     },
     handleClose() {
       this.modalToggle = false;
