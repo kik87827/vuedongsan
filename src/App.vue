@@ -10,14 +10,26 @@
     </div>
   </div> -->
 
-  <Modal :roomData="roomData" :modalIndex="modalIndex" @modalClose="handleClose" v-if="modalToggle" />
+  <!-- <div class="start" :class="{ end : modalToggle }">
+    <Modal :roomData="roomData" :modalIndex="modalIndex" @modalClose="handleClose" v-if="modalToggle" />
+  </div> -->
+  <transition name="fade">
+    <Modal :roomData="roomData" :modalIndex="modalIndex" @modalClose="handleClose" v-if="modalToggle" />
+  </transition>
 
   <div class="menu">
     <a v-for="(item, index) in menus" :key="item">{{ item }}</a>
   </div>
 
-  <DiscountBanner />
+  <DiscountBanner v-if="bannerToggle" />
   <!-- <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" /> -->
+
+  <div style="text-align:center">
+    <button @click="priceSort">가격순정렬</button>
+    <button @click="priceReverseSort">가격역순정렬</button>
+    <button @click="titleSort">가나다정렬</button>
+    <button @click="originSort">원래대로</button>
+  </div>
 
   <div class="room-list">
     <ProductItem
@@ -87,6 +99,17 @@ body {
   margin: 10px;
   display: block;
 }
+
+.start{opacity:0; transition: all 1s;}
+.end{opacity:1;}
+
+.fade-enter-from{opacity:0;}
+.fade-enter-active{transition: all 1s;}
+.fade-enter-to{opacity:1;}
+
+.fade-leave-from{opacity:1;}
+.fade-leave-active{transition: all 1s;}
+.fade-leave-to{opacity:0;}
 </style>
 
 <script>
@@ -107,11 +130,14 @@ export default {
         { title: "천호동원룸", price: "가격은아무거나" },
         { title: "마포구원룸", price: "가격은아무거나" },
       ], */
+      bannerToggle : true,
+      //bannerTime : 0,
       menus: ["Home", "Products", "About"],
       count: [],
       modalToggle: false,
       modalIndex: 0,
       roomData,
+      roomDataOrigin : [...roomData],
     };
   },
   components: {
@@ -130,8 +156,32 @@ export default {
     handleClose() {
       this.modalToggle = false;
     },
+    priceSort(){
+      this.roomData.sort((a,b)=>{
+        return a.price - b.price;
+      });
+    },
+    priceReverseSort(){
+      this.roomData.sort((a,b)=>{
+        return b.price - a.price;
+      });
+    },
+    titleSort(){
+      this.roomData.sort((a, b) => a.title.localeCompare(b.title, { sensitivity: 'base' }));
+    },
+    originSort(){
+      this.roomData = [...this.roomDataOrigin];
+    }
   },
-  mounted() {},
+  mounted() {
+   /*  this.bannerTime = setTimeout(() => {
+      this.bannerToggle = false;
+    }, 2000); */
+  },
+  unmounted() {
+    /* clearTimeout(this.bannerTime);
+    this.bannerTime = 0; */
+  },
   created() {
     //this.roomData.forEach(() => this.count.push(0));
     this.count = new Array(this.roomData.length).fill(0);

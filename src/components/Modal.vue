@@ -17,7 +17,9 @@
       </div>
       <div style="color: red">{{ warnText }}</div>
       <br />
-      <p>{{ month }}개월 선택함 : {{ roomData[modalIndex].price * month }} 원</p>
+      <p>
+        {{ month }}개월 선택함 : {{ roomData[modalIndex].price * month }} 원
+      </p>
       <br />
       <div><button @click="emitModal">닫기</button></div>
     </div>
@@ -29,8 +31,9 @@ export default {
   name: "Modal",
   data() {
     return {
-      month: 1,
+      month: "",
       warnText: "",
+      settimer: 0,
     };
   },
   watch: {
@@ -56,6 +59,19 @@ export default {
     modalToggle: Boolean,
     roomData: Array,
     modalIndex: Number,
+  },
+  updated() {
+    if (this.month <= 2) {
+      this.warnText = "2개월 이하는 안해요 3개월부터 해요";
+      if (this.settimer) {
+        clearTimeout(this.settimer);
+      }
+    }
+    this.settimer = setTimeout(() => {
+      if (this.month <= 2) {
+        this.month = 3;
+      }
+    }, 500);
   },
   emits: ["modalClose"],
   methods: {
